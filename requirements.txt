@@ -1,4 +1,7 @@
-Flask
-requests
-sentence-transformers
-torch
+fastapi
+uvicorn
+langchain
+openai
+faiss-cpu
+pydantic
+langchain-community
