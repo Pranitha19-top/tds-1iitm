@@ -20,7 +20,7 @@ app.add_middleware(
 )
 
 # Set your OpenAI API key here or use an environment variable
-os.environ["OPENAI_API_KEY"] = "your-openai-api-key"
+os.environ["OPENAI_API_KEY"] = "your-openai-api-key"  # Replace with your actual API key or use env variable
 
 # Request body format
 class Question(BaseModel):
@@ -32,18 +32,21 @@ def read_root():
 
 @app.post("/ask")
 async def ask_question(q: Question):
-    # Load the vector store
     embeddings = OpenAIEmbeddings()
     db = FAISS.load_local("vectorstore", embeddings)
-
-    # Retrieve relevant chunks
     docs = db.similarity_search(q.question)
-
-    # Load LLM and QA chain
     llm = OpenAI(temperature=0)
     chain = load_qa_chain(llm, chain_type="stuff")
-
-    # Generate answer
     answer = chain.run(input_documents=docs, question=q.question)
-
     return {"answer": answer}
+
+@app.post("/api/")
+async def api_ask_question(q: Question):
+    embeddings = OpenAIEmbeddings()
+    db = FAISS.load_local("vectorstore", embeddings)
+    docs = db.similarity_search(q.question)
+    llm = OpenAI(temperature=0)
+    chain = load_qa_chain(llm, chain_type="stuff")
+    answer = chain.run(input_documents=docs, question=q.question)
+    return {"answer": answer}
+
