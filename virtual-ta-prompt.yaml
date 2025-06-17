@@ -1,0 +1,21 @@
+providers:
+  - name: "virtual-ta-api"
+    type: api
+    config:
+      url: "https://tds-1iitm.onrender.com/api/"
+      method: POST
+      headers:
+        Content-Type: application/json
+
+scenarios:
+  - name: "Basic question test"
+    config: "virtual-ta-api"
+    tests:
+      - input: '{"question": "What is the Tools in Data Science course about?"}'
+        expected_output_contains: "Tools in Data Science"
+        
+  - name: "Model selection question"
+    config: "virtual-ta-api"
+    tests:
+      - input: '{"question": "Should I use gpt-4o-mini or gpt-3.5-turbo for this project?"}'
+        expected_output_contains: "gpt-3.5-turbo"
