@@ -1,0 +1,102 @@
+description: "TDS Virtual TA Promptfoo Tests"
+
+providers:
+  - id: fastapi-provider
+    config:
+      url: https://tds-1iitm.onrender.com/api/
+      method: POST
+      headers:
+        Content-Type: application/json
+      body: |
+        {
+          "question": "{{ question }}"
+        }
+      transformResponse: json
+
+defaultTest:
+  assert:
+    - type: is-json
+      value:
+        type: object
+        required: [answer, links]
+        properties:
+          answer: { type: string }
+          links:
+            type: array
+            items:
+              type: object
+              required: [url, text]
+              properties:
+                url: { type: string }
+                text: { type: string }
+
+tests:
+  - vars:
+      question: What is the TDS course about?
+    assert:
+      - type: contains
+        transform: output.answer
+        value: TDS
+
+  - vars:
+      question: When is the end-term exam for TDS Sep 2025?
+    assert:
+      - type: llm-rubric
+        transform: output.answer
+        value: doesn’t know
+
+  - vars:
+      question: Should I use Podman or Docker?
+    assert:
+      - type: contains
+        transform: output.answer
+        value: Podman
+
+  - vars:
+      question: If I get full marks in GA4, what will the dashboard show?
+    assert:
+      - type: contains
+        transform: output.answer
+        value: 110
+
+  - vars:
+      question: What are the tools used in TDS?
+    assert:
+      - type: contains
+        transform: output.answer
+        value: tools
+
+  - vars:
+      question: Where can I ask doubts for TDS?
+    assert:
+      - type: contains
+        transform: output.answer
+        value: Discourse
+
+  - vars:
+      question: How to submit assignments in TDS?
+    assert:
+      - type: contains
+        transform: output.answer
+        value: submit
+
+  - vars:
+      question: What model should I use for this project?
+    assert:
+      - type: contains
+        transform: output.answer
+        value: gpt
+
+  - vars:
+      question: How to access course material?
+    assert:
+      - type: contains
+        transform: output.answer
+        value: portal
+
+  - vars:
+      question: What’s the grading scheme in TDS?
+    assert:
+      - type: contains
+        transform: output.answer
+        value: grading
