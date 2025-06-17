@@ -1,15 +1,15 @@
 description: "TDS Virtual TA Promptfoo Tests"
 
 providers:
-  - id: local-api
-    custom:
-      url: https://tds-1iitm.onrender.com/api/
-      method: POST
-      headers:
-        Content-Type: application/json
-      body:
-        question: "{{ question }}"
-      transformResponse: json
+  - id: fastapi-api
+    type: http
+    url: https://tds-1iitm.onrender.com/api/
+    method: POST
+    headers:
+      Content-Type: application/json
+    body:
+      question: "{{ question }}"
+    transform: json
 
 defaultTest:
   assert:
